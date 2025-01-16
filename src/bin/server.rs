@@ -60,7 +60,7 @@ fn main() {
 	let port = &arg[1];
     let listener = TcpListener::bind(format!("127.0.0.1:{}", port)).expect("Could not bind to address");
 
-    println!("Server is listening on port 7878...");
+    println!("Server is listening on port {port}...");
 
 	/*
     // Accept single incoming connection
