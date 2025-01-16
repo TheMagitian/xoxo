@@ -2,8 +2,7 @@ use std::net::{TcpListener, TcpStream};
 use std::io::Read;
 use std::env;
 use std::str;
-mod colours;
-use colours::*;
+use xoxo::colours::*;
 
 fn encrypt_xoxo(msg: &mut u64, v: &Vec<u64>) -> u64 {
 	for i in 0..v.len() {

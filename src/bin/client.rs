@@ -5,8 +5,7 @@ const KEY: u64 = 987654;
 use std::io::Write;
 use std::net::TcpStream;
 use std::env;
-mod colours;
-use colours::*;
+use xoxo::colours::*;
 
 // Functions
 fn fill_prime(prime: &mut Vec<u64>, high: u64) {
