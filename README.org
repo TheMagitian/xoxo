@@ -1,0 +1,11 @@
+* XOXO encryption algorithm
+
+[[https://gitlab.com/magitian/xoxo][XOXO]] is a simple /proof-of-concept/ _encryption_ algorithm that utilizes concepts from other algorithms in an attempt to create a (reasonably) strong algorithm.
+
+This reference implementation in the *Rust* programming language provides 2 binaries: ~xoxo-server~ and ~xoxo-client~. These binaries make use of a _client-server architecture_ to facilitate communication between 2 parties.
+
+The /client/ *encrypts* plain-text passed to it as an argument and sends the *ciphertext* over to the /server/. The server then *decrypts* it to retrieve the *plain-text*.
+
+Here's a picture demonstrating the functionality:
+
+[[./images/readme_1_demo.jpg]]

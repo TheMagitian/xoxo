@@ -1,13 +1,10 @@
-// Constants
 const KEY: u64 = 987654;
 
-// Imports
 use std::io::Write;
 use std::net::TcpStream;
 use std::env;
 use xoxo::colours::*;
 
-// Functions
 fn fill_prime(prime: &mut Vec<u64>, high: u64) {
     let mut ck = vec![true; (high + 1) as usize];
     
@@ -40,7 +37,7 @@ fn segmented_sieve(mut low: u64, high: u64) -> Vec<u64> {
     let mut chprime = vec![];
     let mut tmp: Vec<u64> = vec![];
     
-    // Generate primes up to sqrt(high)
+    // generate primes up to sqrt(high)
     fill_prime(&mut chprime, (high as f64).sqrt() as u64);
 
 
@@ -109,7 +106,6 @@ fn main() {
 	let primes = segmented_sieve(KEY, (105*KEY) as u64/100);
 	let mut primes = get_final_list(&primes);
 	let lcs_primes: &mut Vec<u64> = lcs_vector(&mut primes);
-	// let rcs_primes: &Vec<u64> = rcs_vector(&mut *lcs_primes);
 	
 	let mut int_ptext = u64::from_str_radix(ptext, 2).unwrap();
 	let enc_msg_xoxo = encrypt_xoxo(&mut int_ptext, lcs_primes);
@@ -124,5 +120,4 @@ fn main() {
 	}
 
 	stream.write_all(&primes_bytes).expect("Failed to send primes to server.");
-	// println!(">>> Primes sent to server: {:?}", &lcs_primes);
 }

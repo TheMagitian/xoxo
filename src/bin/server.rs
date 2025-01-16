@@ -14,14 +14,12 @@ fn encrypt_xoxo(msg: &mut u64, v: &Vec<u64>) -> u64 {
 fn handle_client(mut stream: TcpStream) {
     let mut buffer = [0u8; 512];
     let mut enc_msg_xoxo: &str = "";
-    // First, read the encrypted message as a binary string
+    // read the encrypted message as a binary string
     match stream.read(&mut buffer) {
         Ok(size) => {
             if let Ok(message) = str::from_utf8(&buffer[..size]) {
 				enc_msg_xoxo = message;
-                // Convert the received binary string back into an integer
                 // let encrypted_message = u64::from_str_radix(message, 2).unwrap_or(0);
-                // println!(">>> Encrypted message received: {}", encrypted_message);
                 println!("{BLUE}>>>{RESET} {RED}{RESET} {ITALIC} Encrypted message received from client: {RESET}{YELLOW}{}{RESET}", message);
             } else {
                 eprintln!("{RED}  {RESET} {ITALIC}Failed to decode encrypted message.{RESET}");
@@ -31,7 +29,6 @@ fn handle_client(mut stream: TcpStream) {
 
     }
 
-    // Read the primes (serialized u64 integers)
     let mut primes_buffer = [0u8; 2048]; // arbitrary maximum buffer size
     match stream.read(&mut primes_buffer) {
         Ok(size) => {
@@ -41,8 +38,6 @@ fn handle_client(mut stream: TcpStream) {
                     .map(|chunk| u64::from_be_bytes(chunk.try_into().unwrap()))
                     .collect();
                 
-                // println!(">>> Received primes: {:?}", primes);
-
 				let mut enc_msg_xoxo2 = u64::from_str_radix(enc_msg_xoxo, 2).unwrap();
 				let dec_msg_xoxo = encrypt_xoxo(&mut enc_msg_xoxo2, &primes);
 				let dec_msg_xoxo_bin = format!("{:b}", dec_msg_xoxo);
@@ -63,30 +58,7 @@ fn main() {
 
     println!("{BOLD}Server is listening on port{RESET} {HIGHLIGHT}{port}{RESET}\n");
 
-	/*
-    // Accept single incoming connection
-	match listener.accept() {
-		Ok((stream, _)) => { handle_client(stream) },
-		Err(e) => eprintln!("Error while accepting connection: {}", e)
-	}
-	 */
-
-    // Accept incoming connections in a loop
-	/*
-    for stream in listener.incoming() {
-        match stream {
-            Ok(stream) => {
-                // Handle each client connection in a new thread
-                thread::spawn(move || {
-                    handle_client(stream);
-                });
-            }
-            Err(e) => eprintln!("Error accepting connection: {}", e),
-        }
-}
-	 */
 	if let Ok((stream, _)) = listener.accept() {
-		// Handle the client in a single thread
 		handle_client(stream);
 	} else {
 		eprintln!("Error accepting connection.");
