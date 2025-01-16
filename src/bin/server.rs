@@ -2,6 +2,8 @@ use std::net::{TcpListener, TcpStream};
 use std::io::Read;
 use std::env;
 use std::str;
+mod colours;
+use colours::*;
 
 fn encrypt_xoxo(msg: &mut u64, v: &Vec<u64>) -> u64 {
 	for i in 0..v.len() {
@@ -21,9 +23,9 @@ fn handle_client(mut stream: TcpStream) {
                 // Convert the received binary string back into an integer
                 // let encrypted_message = u64::from_str_radix(message, 2).unwrap_or(0);
                 // println!(">>> Encrypted message received: {}", encrypted_message);
-                println!(">>> Encrypted message received: {}", message);
+                println!("{BLUE}>>>{RESET} {RED}{RESET} {ITALIC} Encrypted message received from client: {RESET}{YELLOW}{}{RESET}", message);
             } else {
-                eprintln!("Failed to decode encrypted message");
+                eprintln!("{RED}  {RESET} {ITALIC}Failed to decode encrypted message.{RESET}");
             }
         }
         Err(e) => eprintln!("Failed to read encrypted message from stream: {}", e),
@@ -40,17 +42,17 @@ fn handle_client(mut stream: TcpStream) {
                     .map(|chunk| u64::from_be_bytes(chunk.try_into().unwrap()))
                     .collect();
                 
-                println!(">>> Received primes: {:?}", primes);
+                // println!(">>> Received primes: {:?}", primes);
 
 				let mut enc_msg_xoxo2 = u64::from_str_radix(enc_msg_xoxo, 2).unwrap();
 				let dec_msg_xoxo = encrypt_xoxo(&mut enc_msg_xoxo2, &primes);
 				let dec_msg_xoxo_bin = format!("{:b}", dec_msg_xoxo);
-				println!(">>> Decryted message: {}", dec_msg_xoxo_bin);
+				println!("{GREEN}<<<{RESET}{ITALIC}{RED} {RESET}{ITALIC}  Decrypted message:{RESET} {VIOLET}{}{RESET}", dec_msg_xoxo_bin);
             } else {
-                eprintln!("Error while receiving the primes.");
+                eprintln!("{RED}  {RESET} {ITALIC}Error while receiving the primes. {RESET}");
             }
         },
-        Err(e) => eprintln!("Error while receiving primes: {}", e),
+        Err(_) => eprintln!("{RED}  {RESET} {ITALIC}Error while receiving the primes. {RESET}")
     }
 
 }
@@ -60,7 +62,7 @@ fn main() {
 	let port = &arg[1];
     let listener = TcpListener::bind(format!("127.0.0.1:{}", port)).expect("Could not bind to address");
 
-    println!("Server is listening on port {port}...");
+    println!("{BOLD}Server is listening on port{RESET} {HIGHLIGHT}{port}{RESET}\n");
 
 	/*
     // Accept single incoming connection

@@ -5,6 +5,8 @@ const KEY: u64 = 987654;
 use std::io::Write;
 use std::net::TcpStream;
 use std::env;
+mod colours;
+use colours::*;
 
 // Functions
 fn fill_prime(prime: &mut Vec<u64>, high: u64) {
@@ -102,7 +104,8 @@ fn main() {
 	
 	let mut stream = TcpStream::connect(format!("127.0.0.1:{}", port)).expect("Unable to connect to the server.");
 
-	println!(">>> Input message: {}", ptext);
+	println!("{BOLD}Client attempting to connect to port {RESET}{HIGHLIGHT}{}{RESET}\n", {port});
+	println!("{GREEN}>>>{RESET}{RED}  {RESET} {ITALIC}Message to be encrypted: {RESET}{VIOLET}{}{RESET}", ptext);
 
 	let primes = segmented_sieve(KEY, (105*KEY) as u64/100);
 	let mut primes = get_final_list(&primes);
@@ -114,7 +117,7 @@ fn main() {
 	let enc_msg_xoxo_bin = format!("{:b}", enc_msg_xoxo);
 	
 	stream.write(enc_msg_xoxo_bin.as_bytes()).expect("Failed to send message to server.");
-	println!(">>> Encrypted message sent to server: {}", enc_msg_xoxo_bin);
+	println!("{BLUE}<<<{RESET} {RED}{RESET}{ITALIC}  Encrypted message sent to server:{RESET} {YELLOW}{}{RESET}", enc_msg_xoxo_bin);
 
 	let mut primes_bytes = Vec::new();
 	for n in &mut *lcs_primes {
@@ -122,5 +125,5 @@ fn main() {
 	}
 
 	stream.write_all(&primes_bytes).expect("Failed to send primes to server.");
-	println!(">>> Primes sent to server: {:?}", &lcs_primes);
+	// println!(">>> Primes sent to server: {:?}", &lcs_primes);
 }
