@@ -3,4 +3,12 @@ name = "xoxo"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "xoxo-server"
+path = "src/bin/server.rs"
+
+[[bin]]
+name = "xoxo-client"
+path = "src/bin/client.rs"
+
 [dependencies]
