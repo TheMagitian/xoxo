@@ -6,6 +6,14 @@ This reference implementation in the *Rust* programming language provides 2 bina
 
 The /client/ *encrypts* plain-text passed to it as an argument and sends the *ciphertext* over to the /server/. The server then *decrypts* it to retrieve the *plain-text*.
 
+* How to compile the source code
+
+This repository makes use of /Cargo/'s tooling, therefore to build the binaries, use ~cargo build -r~ for the optimised binaries.
+
+Then use the ~./target/release/xoxo-{server,client}~ binaries as indicated below.
+
+* Screenshot
+
 Here's a picture demonstrating the functionality:
 
-[[./images/readme_1_demo.jpg]]
+[[./images/readme_2_demo.jpg]]

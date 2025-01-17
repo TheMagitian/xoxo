@@ -56,7 +56,7 @@ fn main() {
 	let port = &arg[1];
     let listener = TcpListener::bind(format!("127.0.0.1:{}", port)).expect("Could not bind to address");
 
-    println!("{BOLD}Server is listening on port{RESET} {HIGHLIGHT}{port}{RESET}\n");
+    println!("{BOLD}Server listening on port{RESET} {HIGHLIGHT}{port}{RESET}\n");
 
 	if let Ok((stream, _)) = listener.accept() {
 		handle_client(stream);
