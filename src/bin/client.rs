@@ -29,6 +29,22 @@ fn fill_prime(prime: &mut Vec<u64>, high: u64) {
     }
 }
 
+fn char_to_alpha_pos(c: char) -> u8 {
+	if c.is_ascii_lowercase() {
+		c as u8 - b'a' + 1
+	} else if c.is_ascii_uppercase() {
+		c as u8 - b'A' + 1
+	} else {
+		panic!("Only alphabetic chars are allowed")
+	}
+}
+
+fn text_to_binary(s: &str) -> String {
+	s.chars().map(|c| format!("{:05b}", char_to_alpha_pos(c)))
+		.collect::<Vec<String>>()
+		.join("")
+}
+
 fn segmented_sieve(mut low: u64, high: u64) -> Vec<u64> {
     if low < 2 { low = 2; }
 
@@ -98,6 +114,8 @@ fn main() {
 	let port = &arg[1];
 	let ptext = &arg[2];
 	
+	let bin_text = text_to_binary(&ptext);
+
 	let mut stream = TcpStream::connect(format!("127.0.0.1:{}", port)).expect("Unable to connect to the server.");
 
 	println!("{BOLD}Client attempting to connect to port {RESET}{HIGHLIGHT}{}{RESET}\n", {port});
@@ -107,7 +125,7 @@ fn main() {
 	let mut primes = get_final_list(&primes);
 	let lcs_primes: &mut Vec<u64> = lcs_vector(&mut primes);
 	
-	let mut int_ptext = u64::from_str_radix(ptext, 2).unwrap();
+	let mut int_ptext = u64::from_str_radix(&bin_text, 2).unwrap();
 	let enc_msg_xoxo = encrypt_xoxo(&mut int_ptext, lcs_primes);
 	let enc_msg_xoxo_bin = format!("{:b}", enc_msg_xoxo);
 	

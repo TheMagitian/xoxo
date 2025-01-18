@@ -11,6 +11,24 @@ fn encrypt_xoxo(msg: &mut u64, v: &Vec<u64>) -> u64 {
 	*msg
 }
 
+fn binary_to_text(binary: &str) -> String {
+    let padded_length = (binary.len() + 4) / 5 * 5; // round up to nearest multiple of 5
+    let padded_binary = format!("{:0>width$}", binary, width = padded_length);
+    padded_binary
+        .as_bytes()
+        .chunks(5)
+        .filter_map(|chunk| {
+            let chunk_str = str::from_utf8(chunk).ok()?;
+            let value = u8::from_str_radix(chunk_str, 2).ok()?;
+            if value >= 1 && value <= 26 {
+                Some((value + b'a' - 1) as char)
+            } else {
+                None
+            }
+        })
+        .collect()
+}
+
 fn handle_client(mut stream: TcpStream) {
     let mut buffer = [0u8; 512];
     let mut enc_msg_xoxo: &str = "";
@@ -41,7 +59,9 @@ fn handle_client(mut stream: TcpStream) {
 				let mut enc_msg_xoxo2 = u64::from_str_radix(enc_msg_xoxo, 2).unwrap();
 				let dec_msg_xoxo = encrypt_xoxo(&mut enc_msg_xoxo2, &primes);
 				let dec_msg_xoxo_bin = format!("{:b}", dec_msg_xoxo);
-				println!("{GREEN}<<<{RESET}{ITALIC}{RED} {RESET}{ITALIC}  Decrypted message:{RESET} {VIOLET}{}{RESET}", dec_msg_xoxo_bin);
+				let dec_msg_xoxo_text = binary_to_text(&dec_msg_xoxo_bin);
+				
+				println!("{GREEN}<<<{RESET}{ITALIC}{RED} {RESET}{ITALIC}  Decrypted message:{RESET} {VIOLET}{}{RESET}", dec_msg_xoxo_text);
             } else {
                 eprintln!("{RED}  {RESET} {ITALIC}Error while receiving the primes. {RESET}");
             }
