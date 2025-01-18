@@ -1,4 +1,4 @@
-const KEY: u64 = 987654;
+const KEY: u64 = 100000;
 
 use std::io::Write;
 use std::net::TcpStream;
@@ -104,7 +104,8 @@ fn lcs_vector(v: &mut Vec<u64>) -> &mut Vec<u64> {
 
 fn encrypt_xoxo(msg: &mut u64, v: &Vec<u64>) -> u64 {
 	for i in 0..v.len() {
-		*msg = (*msg) ^ v[i]
+		*msg = (*msg) ^ v[i];
+		println!("XOR with {} is:  {}", v[i], format!("{:05b}", *msg));
 	}
 	*msg
 }
@@ -122,9 +123,12 @@ fn main() {
 	println!("{GREEN}>>>{RESET}{RED}  {RESET} {ITALIC}Message to be encrypted: {RESET}{VIOLET}{}{RESET}", ptext);
 
 	let primes = segmented_sieve(KEY, (105*KEY) as u64/100);
+	println!("List of primes: {:?}", get_final_list(&primes));
 	let mut primes = get_final_list(&primes);
 	let lcs_primes: &mut Vec<u64> = lcs_vector(&mut primes);
 	
+	println!("Numbers sent to server: {BOLD}{UNDERLINE}{:?}{RESET}", lcs_primes);
+	println!("Plaintext as bin: {CYAN}{}{RESET}", bin_text);
 	let mut int_ptext = u64::from_str_radix(&bin_text, 2).unwrap();
 	let enc_msg_xoxo = encrypt_xoxo(&mut int_ptext, lcs_primes);
 	let enc_msg_xoxo_bin = format!("{:b}", enc_msg_xoxo);

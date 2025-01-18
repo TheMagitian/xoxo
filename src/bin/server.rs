@@ -6,8 +6,10 @@ use xoxo::colours::*;
 
 fn encrypt_xoxo(msg: &mut u64, v: &Vec<u64>) -> u64 {
 	for i in 0..v.len() {
-		*msg = (*msg) ^ v[i]
+		*msg = (*msg) ^ v[i];
+		println!("XOR with {} is: {}", v[i], format!("{:05b}", *msg));
 	}
+	println!("Plaintext as bin:   {CYAN}{}{RESET}", format!("{:05b}", *msg));
 	*msg
 }
 
@@ -56,6 +58,7 @@ fn handle_client(mut stream: TcpStream) {
                     .map(|chunk| u64::from_be_bytes(chunk.try_into().unwrap()))
                     .collect();
                 
+				println!("Numbers received from client: {BOLD}{UNDERLINE}{:?}{RESET}", primes);
 				let mut enc_msg_xoxo2 = u64::from_str_radix(enc_msg_xoxo, 2).unwrap();
 				let dec_msg_xoxo = encrypt_xoxo(&mut enc_msg_xoxo2, &primes);
 				let dec_msg_xoxo_bin = format!("{:b}", dec_msg_xoxo);
