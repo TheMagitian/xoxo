@@ -16,4 +16,4 @@ Then use the ~./target/release/xoxo-{server,client}~ binaries as indicated below
 
 Here's a picture demonstrating the functionality:
 
-[[./images/readme_2_demo.jpg]]
+[[./images/readme_3_demo.jpg]]
